@@ -35,39 +35,44 @@
 
 <div class="topbar">
   <div class="wrap">
-    <a class="logo" href="./">ARE WE THROUGH<span class="q">?</span></a>
-    <select id="teampick" aria-label="Pick your team"><option value="">🌍 Pick your team…</option></select>
+    <a class="logo" href="./"><span class="mark" id="logomark"></span>AreWeThrough<span class="q">?</span></a>
     <span class="grow"></span>
-    <button class="btn primary" id="share">🔗 Share scenario</button>
+    <select class="teamsel" id="teampick" aria-label="Pick your team"><option value="">Pick your team…</option></select>
+    <button class="btn primary" id="share"><span id="shareicn"></span>Share scenario</button>
   </div>
 </div>
 
 <header class="hero wrap">
   <h1>Will your team survive the group<span class="q">?</span></h1>
-  <p class="sub">48 teams. 12 groups. Only the top two go through directly — plus the <b>8 best third-placed teams</b>, ranked across all groups. Nobody can do that math in their head. This page can.</p>
-  <p class="sub">Type scores for the remaining games. Watch the tables react. Share the link, win the argument.</p>
-  <span class="pill">⚽ FIFA World Cup 2026 · Group stage June 11–27 · unofficial fan tool</span>
+  <p class="sub">First World Cup with 48 teams: top two of each group advance, plus the <b>8 best third-placed teams</b> ranked across all 12 groups. Nobody can do that math in their head. This page can.</p>
+  <div class="pickbox">
+    <select class="teamsel hero-pick" aria-label="Pick your team">
+      <option value="">🌍 Pick your team to get the verdict…</option>
+    </select>
+    <div class="hint">…or scroll the groups and type scores for any match</div>
+  </div>
   <div id="verdict" class="verdict" style="display:none"></div>
   <div class="controls">
-    <button class="btn" id="fill-draws">Fill rest: all draws</button>
-    <button class="btn" id="fill-random">🎲 Fill rest: random</button>
-    <button class="btn" id="clear">Clear my scores</button>
-    <span class="hint">Official results are locked. Everything else is yours to predict.</span>
+    <button class="btn" id="fill-draws"><span data-icn="equal"></span>All draws</button>
+    <button class="btn" id="fill-random"><span data-icn="dices"></span>Random</button>
+    <button class="btn" id="clear"><span data-icn="eraser"></span>Reset</button>
+    <span class="hint">Played matches are locked as official results — the rest is yours to predict.</span>
   </div>
+  <p class="meta">World Cup 2026 · group stage June 11–27 · results auto-update · unofficial fan tool</p>
 </header>
 
 <main class="wrap">
   <div id="groups" class="groups" aria-live="polite"></div>
 
   <section class="thirds" id="thirds">
-    <h2>🥉 Best third-placed teams — live ranking</h2>
-    <p class="note">Top 8 advance to the Round of 32. Ranked by points → goal difference → goals scored. ⚖ means teams are dead level and fair play points / drawing of lots would decide.</p>
+    <h2><span data-icn="trophy"></span>Best third-placed teams</h2>
+    <p class="note">Top 8 advance to the Round of 32 — ranked by points, then goal difference, then goals scored.</p>
     <ol id="thirdlist"></ol>
   </section>
 
   <section class="content">
     <h2>Why this exists</h2>
-    <p>The 2026 World Cup is the first with 48 teams, and the group stage math got genuinely weird: finishing third in your group might be enough — but only if your record beats the third-placed teams of <em>eleven other groups</em>. During the last round of games (June 24–27) the permutations change with every goal, everywhere, at once.</p>
+    <p>The 2026 World Cup is the first with 48 teams, and the group-stage math got genuinely weird: finishing third in your group might be enough — but only if your record beats the third-placed teams of <em>eleven other groups</em>. During the last round of games (June 24–27) the permutations change with every goal, everywhere, at once.</p>
     <p>Every score box on this page is editable. Played matches are locked as official results. Your scenario lives in the page address — copy it and send it to the person who is wrong on the internet.</p>
 
     <div class="faq">
@@ -77,9 +82,9 @@
       <h3>How are the best thirds ranked?</h3>
       <p>Points, then goal difference, then goals scored. Still level? Fair play points, then a literal drawing of lots.</p>
       <h3>What breaks ties inside a group?</h3>
-      <p>Points → goal difference → goals scored → head-to-head among the tied teams (points, GD, goals) → fair play → lots. This calculator applies the full chain and flags ⚖ when it comes down to fair play or lots.</p>
+      <p>Points → goal difference → goals scored → head-to-head among the tied teams (points, GD, goals) → fair play → lots. This calculator applies the full chain and shows a scale icon when it comes down to fair play or lots.</p>
       <h3>Is this official?</h3>
-      <p>No — it's an unofficial free fan tool. Match data comes from public sources and updates daily during the tournament. Not affiliated with FIFA.</p>
+      <p>No — it's an unofficial free fan tool, not affiliated with FIFA or any federation. Results refresh automatically from public sources during the tournament.</p>
     </div>
 
     <h2>Your team's page</h2>
@@ -89,14 +94,21 @@
 
 <footer>
   <div class="wrap cols">
-    <span>ARE WE THROUGH<span style="color:var(--green)">?</span> — made overnight by two founders and a robot 🤖</span>
+    <span>AreWeThrough? — made overnight by two founders and a robot</span>
     <span><a href="how-it-works.html">How the rules work</a> · <a href="teams/">All 48 teams</a> · <a href="privacy.html">Privacy</a></span>
-    <span class="updated">Results updated: <span id="updated">—</span> · Unofficial fan project, not affiliated with FIFA</span>
+    <span>Match data: <a href="https://en.wikipedia.org/wiki/2026_FIFA_World_Cup" rel="external">Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license external">CC BY-SA 4.0</a>) · updated <span id="updated">—</span> · unofficial fan project, not affiliated with FIFA</span>
   </div>
 </footer>
 
 <div id="toast" role="status"></div>
 <script src="data.js"></script>
+<script src="icons.js"></script>
 <script src="app.js"></script>
+<script>
+  // hydrate static icon slots
+  document.getElementById("logomark").innerHTML = icon("goal");
+  document.getElementById("shareicn").innerHTML = icon("share-2");
+  document.querySelectorAll("[data-icn]").forEach(el => { el.innerHTML = icon(el.dataset.icn); });
+</script>
 </body>
 </html>

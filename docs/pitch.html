@@ -13,28 +13,28 @@
   .slide {
     min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column;
     justify-content: center; padding: 48px 20px; max-width: 880px; margin: 0 auto;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--border);
   }
   .slide .n { color: var(--muted); font-size: 13px; letter-spacing: 2px; margin-bottom: 14px; }
   .slide h2 { font-size: clamp(28px, 5vw, 44px); margin: 0 0 18px; letter-spacing: -1px; }
-  .slide p, .slide li { font-size: clamp(16px, 2.4vw, 19px); color: #cfe3d3; }
+  .slide p, .slide li { font-size: clamp(16px, 2.4vw, 19px); color: var(--text); }
   .slide .big { font-size: clamp(40px, 9vw, 84px); font-weight: 800; letter-spacing: -2px; margin: 8px 0; }
   .kpi { display: flex; gap: 18px; flex-wrap: wrap; margin: 18px 0; }
-  .kpi div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
-  .kpi b { display: block; font-size: 26px; color: var(--green); }
+  .kpi div { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+  .kpi b { display: block; font-size: 26px; color: var(--ok); }
   .kpi span { color: var(--muted); font-size: 13px; }
-  .quote { border-left: 3px solid var(--green); padding-left: 16px; color: var(--muted); font-style: italic; }
+  .quote { border-left: 3px solid var(--ok); padding-left: 16px; color: var(--muted); font-style: italic; }
   table.cmp { border-collapse: collapse; width: 100%; font-size: 15px; }
-  table.cmp td, table.cmp th { border: 1px solid var(--line); padding: 8px 10px; text-align: center; }
+  table.cmp td, table.cmp th { border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
   table.cmp td:first-child { text-align: left; }
-  .ok { color: var(--green); } .no { color: var(--red); }
+  .ok { color: var(--ok); } .no { color: var(--danger); }
 </style>
 </head>
 <body>
 
 <section class="slide">
   <div class="n">MILKABETS PRESENTS · JUNE 2026</div>
-  <div class="big">ARE WE THROUGH<span style="color:var(--green)">?</span></div>
+  <div class="big">ARE WE THROUGH<span style="color:var(--ok)">?</span></div>
   <p>The argument-settling machine for the biggest sporting event in human history.</p>
   <p class="quote">Built overnight. Deployed before sunrise. $0 burned.</p>
   <p style="color:var(--muted);font-size:14px">↓ scroll</p>

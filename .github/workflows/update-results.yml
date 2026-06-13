@@ -1,0 +1,40 @@
+name: Auto-update results
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 min during the tournament; no-op when nothing changed
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-results
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch latest results from Wikipedia
+        run: python3 tools/update_data.py
+
+      - name: Rebuild team pages + sitemap
+        run: node tools/build.js
+
+      - name: Engine sanity tests
+        run: node tools/test_engine.js
+
+      - name: Commit & push if results changed
+        run: |
+          if git diff --quiet docs/; then
+            echo "No new results."
+            exit 0
+          fi
+          git config user.name "results-bot"
+          git config user.email "actions@github.com"
+          git add docs/
+          git commit -m "auto: results update $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

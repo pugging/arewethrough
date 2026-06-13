@@ -1,6 +1,6 @@
 /* AreWeThrough — group-stage scenario engine + UI. No dependencies.
  *
- * Ranking rules implemented per FIFA World Cup 2026 regulations:
+ * Ranking rules implemented per the 2026 World Cup regulations:
  *  Group: points, goal difference, goals scored; teams still level are split by
  *  head-to-head points/GD/goals among themselves; anything left is flagged as
  *  "fair play / drawing of lots" (we don't track bookings).
@@ -125,7 +125,9 @@ function writeHash(user, team) {
 /* ---------------- UI ---------------- */
 
 const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 let USER = {}, TEAM = null;
+const OPEN = new Set(); // groups with the fixtures accordion expanded
 
 function flagName(code, bold) {
   const t = WC.teams[code];
@@ -142,19 +144,25 @@ function renderGroups() {
   }
   for (const g of order) {
     const rows = rankGroup(g, USER);
+    const ms = groupMatches(g);
+    const remaining = ms.filter(m => !effectiveScore(m, USER)).length;
     const card = document.createElement("div");
     card.className = "gcard";
-    let html = `<h3>GROUP ${g}</h3><table class="standings">
-      <tr><th>#</th><th style="text-align:left">Team</th><th>P</th><th class="wdl">W</th><th class="wdl">D</th><th class="wdl">L</th><th>GD</th><th>Pts</th></tr>`;
+    let html = `<h3><span>Group ${g}</span><span class="gdone">${6 - remaining} of 6 scored</span></h3>
+      <table class="standings">
+      <tr><th></th><th>Team</th><th>P</th><th class="wdl">W</th><th class="wdl">D</th><th class="wdl">L</th><th>GD</th><th>Pts</th></tr>`;
     rows.forEach((r, idx) => {
       const cls = [`p${idx + 1}`]; if (r.code === TEAM) cls.push("focus");
       html += `<tr class="${cls.join(" ")}">
-        <td class="pos"><i>${idx + 1}</i></td>
-        <td class="team">${flagName(r.code)}${r.lots ? ' <span class="lots" title="Tied on every metric — fair play points / drawing of lots would decide">⚖</span>' : ""}</td>
+        <td class="pos">${idx + 1}</td>
+        <td class="team">${flagName(r.code)}${r.lots ? ` <span class="lots" title="Tied on every metric — fair play points / drawing of lots would decide">${icon("scale")}</span>` : ""}</td>
         <td>${r.P}</td><td class="wdl">${r.W}</td><td class="wdl">${r.D}</td><td class="wdl">${r.L}</td><td>${r.GD > 0 ? "+" + r.GD : r.GD}</td><td class="pts">${r.Pts}</td></tr>`;
     });
-    html += `</table><div class="fixtures">`;
-    for (const m of groupMatches(g)) {
+    html += `</table>
+      <details data-g="${g}"${OPEN.has(g) ? " open" : ""}>
+      <summary>${icon("chevron-down")} ${remaining ? `Predict scores · ${remaining} match${remaining > 1 ? "es" : ""} left` : "All results in"}</summary>
+      <div class="fixtures">`;
+    for (const m of ms) {
       const d = m.date.slice(5).replace("-", "/");
       const official = m.s1 !== null && m.s1 !== undefined;
       const t1 = WC.teams[m.t1], t2 = WC.teams[m.t2];
@@ -164,13 +172,13 @@ function renderGroups() {
         html += `<span class="score"><b>${m.s1}–${m.s2}</b></span>`;
       } else {
         const u = USER[m.id];
-        html += `<input type="number" min="0" max="35" inputmode="numeric" data-m="${m.id}" data-side="0" value="${u ? u[0] : ""}" class="${u ? "set" : ""}" aria-label="${t1.name} goals">
+        html += `<input type="number" min="0" max="35" inputmode="numeric" placeholder="–" data-m="${m.id}" data-side="0" value="${u && u[0] !== null ? u[0] : ""}" class="${u ? "set" : ""}" aria-label="${t1.name} goals">
           <span class="score">:</span>
-          <input type="number" min="0" max="35" inputmode="numeric" data-m="${m.id}" data-side="1" value="${u ? u[1] : ""}" class="${u ? "set" : ""}" aria-label="${t2.name} goals">`;
+          <input type="number" min="0" max="35" inputmode="numeric" placeholder="–" data-m="${m.id}" data-side="1" value="${u && u[1] !== null ? u[1] : ""}" class="${u ? "set" : ""}" aria-label="${t2.name} goals">`;
       }
       html += `<span class="t">${t2.flag} ${m.t2}</span></div>`;
     }
-    html += `</div>`;
+    html += `</div></details>`;
     card.innerHTML = html;
     root.appendChild(card);
   }
@@ -181,45 +189,48 @@ function renderThirds() {
   const ol = $("#thirdlist");
   ol.innerHTML = "";
   thirds.forEach((r, i) => {
+    if (i === 8) {
+      const cut = document.createElement("li");
+      cut.className = "cutline";
+      cut.textContent = "qualification line";
+      ol.appendChild(cut);
+    }
     const li = document.createElement("li");
-    li.className = (i < 8 ? "in" : "") + (i === 8 ? " cut" : "");
+    li.className = i < 8 ? "in" : "";
     li.innerHTML = `<span class="rank">${i + 1}</span>
-      <span class="nm">${flagName(r.code, r.code === TEAM)} <span class="st">· Group ${r.g}</span>${r.lots ? ' <span class="lots" title="Tied — fair play / lots would decide">⚖</span>' : ""}</span>
-      <span class="st">${r.Pts} pts, ${r.GD > 0 ? "+" + r.GD : r.GD}, ${r.GF} gf</span>`;
+      <span class="nm">${flagName(r.code, r.code === TEAM)} <span class="gtag">· Group ${r.g}</span>${r.lots ? ` <span class="lots" title="Tied — fair play / lots would decide">${icon("scale")}</span>` : ""}</span>
+      <span class="st">${r.Pts} pts · ${r.GD > 0 ? "+" + r.GD : r.GD} gd · ${r.GF} gf</span>`;
     ol.appendChild(li);
   });
+}
+
+function verdictParts(code) {
+  const t = WC.teams[code];
+  const groupScored = groupMatches(t.g).some(m => effectiveScore(m, USER));
+  if (!groupScored) {
+    return { cls: "", status: `Group ${t.g} · not started`, text: `Type scores for ${t.name}'s games below to see every way the group can break.` };
+  }
+  const s = teamStatus(code, USER);
+  const unpredicted = WC.matches.filter(m => !effectiveScore(m, USER)).length;
+  const caveat = unpredicted
+    ? `Based on results + your predictions so far. ${unpredicted} group matches still open.`
+    : `All 72 group matches set in this scenario.`;
+  if (s.status === "through") return { cls: "thru", status: `Through · ${s.as}, Group ${t.g}`, text: caveat };
+  if (s.status === "third-in") return { cls: "third", status: `Through · best third #${s.thirdRank} of 8`, text: `3rd in Group ${t.g}, inside the qualification line. ${caveat}` };
+  if (s.status === "third-out") return { cls: "out", status: `Out · third #${s.thirdRank}, top 8 advance`, text: `3rd in Group ${t.g} but below the qualification line. ${caveat}` };
+  return { cls: "out", status: `Out · ${s.pos}th in Group ${t.g}`, text: caveat };
 }
 
 function renderVerdict() {
   const v = $("#verdict");
   if (!TEAM) { v.style.display = "none"; return; }
   const t = WC.teams[TEAM];
-  const groupScored = groupMatches(t.g).some(m => effectiveScore(m, USER));
-  if (!groupScored) {
-    v.style.display = "block";
-    v.className = "verdict";
-    v.innerHTML = `${t.flag} <b>GROUP ${t.g} HASN'T KICKED OFF YET</b> ⏳<small>Type scores for ${t.name}'s games below and see every way the group can break.</small>`;
-    return;
-  }
-  const s = teamStatus(TEAM, USER);
-  const unpredicted = WC.matches.filter(m => !effectiveScore(m, USER)).length;
-  const caveat = unpredicted
-    ? `${unpredicted} group matches still unpredicted — fill more scores to lock your scenario.`
-    : `All 72 group matches are set in this scenario.`;
+  const p = verdictParts(TEAM);
   v.style.display = "block";
-  if (s.status === "through") {
-    v.className = "verdict thru";
-    v.innerHTML = `${t.flag} <b>${t.name.toUpperCase()} ARE THROUGH</b> as Group ${t.g} ${s.as} in this scenario ✅<small>${caveat}</small>`;
-  } else if (s.status === "third-in") {
-    v.className = "verdict third";
-    v.innerHTML = `${t.flag} <b>${t.name.toUpperCase()} SNEAK THROUGH</b> — 3rd in Group ${t.g}, ranked #${s.thirdRank} of 8 qualifying thirds 😅<small>${caveat}</small>`;
-  } else if (s.status === "third-out") {
-    v.className = "verdict out";
-    v.innerHTML = `${t.flag} <b>${t.name.toUpperCase()} GO HOME</b> — 3rd in Group ${t.g} but only #${s.thirdRank} of the thirds (top 8 advance) 💔<small>${caveat}</small>`;
-  } else {
-    v.className = "verdict out";
-    v.innerHTML = `${t.flag} <b>${t.name.toUpperCase()} ARE OUT</b> — ${s.pos}th in Group ${t.g} in this scenario 💔<small>${caveat}</small>`;
-  }
+  v.className = "verdict " + p.cls;
+  v.innerHTML = `<div class="v-status">${p.status}</div>
+    <div class="v-team">${t.flag} ${t.name}</div>
+    <small>${p.text}</small>`;
 }
 
 function renderAll() {
@@ -250,21 +261,34 @@ function fillRemaining(mode) {
   renderAll();
 }
 
+function setTeam(code, scroll) {
+  TEAM = code || null;
+  $$("select.teamsel").forEach(s => { s.value = TEAM || ""; });
+  if (TEAM) OPEN.add(WC.teams[TEAM].g);
+  renderAll();
+  if (TEAM && scroll) {
+    const v = $("#verdict");
+    if (v) v.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
 function init() {
   const fromHash = readHash();
   USER = fromHash.user;
   TEAM = document.body.dataset.team || fromHash.team || null;
+  if (TEAM) OPEN.add(WC.teams[TEAM].g);
 
-  // team picker
-  const sel = $("#teampick");
+  // team pickers (topbar + optional hero one), kept in sync
   const codes = Object.keys(WC.teams).sort((a, b) => WC.teams[a].name.localeCompare(WC.teams[b].name));
-  for (const c of codes) {
-    const o = document.createElement("option");
-    o.value = c; o.textContent = `${WC.teams[c].flag} ${WC.teams[c].name}`;
-    sel.appendChild(o);
-  }
-  if (TEAM) sel.value = TEAM;
-  sel.addEventListener("change", () => { TEAM = sel.value || null; renderAll(); });
+  $$("select.teamsel").forEach(sel => {
+    for (const c of codes) {
+      const o = document.createElement("option");
+      o.value = c; o.textContent = `${WC.teams[c].flag} ${WC.teams[c].name}`;
+      sel.appendChild(o);
+    }
+    if (TEAM) sel.value = TEAM;
+    sel.addEventListener("change", () => setTeam(sel.value, sel.classList.contains("hero-pick")));
+  });
 
   // score inputs (delegated)
   $("#groups").addEventListener("input", e => {
@@ -286,8 +310,15 @@ function init() {
     }
   });
 
+  // remember which accordions the user opened/closed
+  $("#groups").addEventListener("toggle", e => {
+    const d = e.target;
+    if (!d.dataset || !d.dataset.g) return;
+    if (d.open) OPEN.add(d.dataset.g); else OPEN.delete(d.dataset.g);
+  }, true);
+
   $("#fill-draws").addEventListener("click", () => { fillRemaining("draws"); toast("Remaining matches set to 1–1"); });
-  $("#fill-random").addEventListener("click", () => { fillRemaining("random"); toast("Remaining matches filled randomly 🎲"); });
+  $("#fill-random").addEventListener("click", () => { fillRemaining("random"); toast("Remaining matches filled randomly"); });
   $("#clear").addEventListener("click", () => { USER = {}; renderAll(); toast("Your predictions cleared"); });
 
   $("#share").addEventListener("click", async () => {
@@ -297,11 +328,12 @@ function init() {
     try {
       if (navigator.share) { await navigator.share({ title: "Are We Through?", text, url }); return; }
       await navigator.clipboard.writeText(url);
-      toast("Scenario link copied — go win the argument 🏆");
+      toast("Scenario link copied — go win the argument");
     } catch (e) { /* user cancelled share */ }
   });
 
-  $("#updated").textContent = WC.updated;
+  const upd = $("#updated");
+  if (upd) upd.textContent = WC.updated;
   renderAll();
 }
 

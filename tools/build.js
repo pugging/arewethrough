@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Generates site/teams/<slug>/index.html for all 48 teams, the teams directory
+/* Generates docs/teams/<slug>/index.html for all 48 teams, the teams directory
  * page, and sitemap.xml. Run after update_data.py:  node tools/build.js
  */
 "use strict";
@@ -13,6 +13,31 @@ eval(fs.readFileSync(path.join(ROOT, "data.js"), "utf8").replace("const WC =", "
 
 const fmt = d => new Date(d + "T12:00:00Z").toLocaleDateString("en-US", { month: "long", day: "numeric" });
 const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+
+const FOOTER = (prefix) => `<footer>
+  <div class="wrap cols">
+    <span>AreWeThrough? — unofficial fan tool, not affiliated with FIFA</span>
+    <span><a href="${prefix}how-it-works.html">How the rules work</a> · <a href="${prefix}teams/">All 48 teams</a> · <a href="${prefix}privacy.html">Privacy</a></span>
+    <span>Match data: <a href="https://en.wikipedia.org/wiki/2026_FIFA_World_Cup" rel="external">Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license external">CC BY-SA 4.0</a>) · updated <span id="updated">—</span></span>
+  </div>
+</footer>`;
+
+const HYDRATE = `<script>
+  document.getElementById("logomark").innerHTML = icon("goal");
+  document.getElementById("shareicn").innerHTML = icon("share-2");
+  document.querySelectorAll("[data-icn]").forEach(el => { el.innerHTML = icon(el.dataset.icn); });
+</script>`;
+
+function topbar(prefix) {
+  return `<div class="topbar">
+  <div class="wrap">
+    <a class="logo" href="${prefix}"><span class="mark" id="logomark"></span>AreWeThrough<span class="q">?</span></a>
+    <span class="grow"></span>
+    <select class="teamsel" aria-label="Pick your team"><option value="">Pick your team…</option></select>
+    <button class="btn primary" id="share"><span id="shareicn"></span>Share scenario</button>
+  </div>
+</div>`;
+}
 
 function teamPage(code) {
   const t = WC.teams[code];
@@ -57,31 +82,24 @@ function teamPage(code) {
 <script type="application/ld+json">${faq}</script>
 </head>
 <body data-team="${code}">
-<div class="topbar">
-  <div class="wrap">
-    <a class="logo" href="../../">ARE WE THROUGH<span class="q">?</span></a>
-    <select id="teampick" aria-label="Pick your team"><option value="">🌍 Pick your team…</option></select>
-    <span class="grow"></span>
-    <button class="btn primary" id="share">🔗 Share scenario</button>
-  </div>
-</div>
+${topbar("../../")}
 <header class="hero wrap">
   <h1>${t.flag} What do ${t.name} need<span class="q">?</span></h1>
-  <p class="sub">${t.name} are in <b>Group ${t.g}</b> of the 2026 World Cup with ${oppList}. Type scores for the remaining games — the tables, the best-thirds ranking and the verdict update instantly.</p>
-  <span class="pill">⚽ Group ${t.g} · ${fixtures.map(m => fmt(m.date)).join(" · ")}</span>
+  <p class="sub">${t.name} are in <b>Group ${t.g}</b> with ${oppList}. Type scores for the remaining games — the tables, the best-thirds ranking and the verdict update instantly.</p>
   <div id="verdict" class="verdict" style="display:none"></div>
   <div class="controls">
-    <button class="btn" id="fill-draws">Fill rest: all draws</button>
-    <button class="btn" id="fill-random">🎲 Fill rest: random</button>
-    <button class="btn" id="clear">Clear my scores</button>
-    <span class="hint">Official results are locked. Everything else is yours to predict.</span>
+    <button class="btn" id="fill-draws"><span data-icn="equal"></span>All draws</button>
+    <button class="btn" id="fill-random"><span data-icn="dices"></span>Random</button>
+    <button class="btn" id="clear"><span data-icn="eraser"></span>Reset</button>
+    <span class="hint">Played matches are locked as official results — the rest is yours to predict.</span>
   </div>
+  <p class="meta">Group ${t.g} matchdays: ${fixtures.map(m => fmt(m.date)).join(" · ")} · results auto-update</p>
 </header>
 <main class="wrap">
   <div id="groups" class="groups" aria-live="polite"></div>
   <section class="thirds" id="thirds">
-    <h2>🥉 Best third-placed teams — live ranking</h2>
-    <p class="note">Top 8 advance to the Round of 32. Ranked by points → goal difference → goals scored.</p>
+    <h2><span data-icn="trophy"></span>Best third-placed teams</h2>
+    <p class="note">Top 8 advance to the Round of 32 — ranked by points, then goal difference, then goals scored.</p>
     <ol id="thirdlist"></ol>
   </section>
   <section class="content">
@@ -90,16 +108,12 @@ function teamPage(code) {
     <p>Third place might be enough: the 8 best third-placed teams across all 12 groups also advance. That ranking — points, then goal difference, then goals scored — is computed live above. <a href="../../how-it-works.html">Full rules explained here.</a></p>
   </section>
 </main>
-<footer>
-  <div class="wrap cols">
-    <span>ARE WE THROUGH<span style="color:var(--green)">?</span> — unofficial fan tool, not affiliated with FIFA</span>
-    <span><a href="../../how-it-works.html">How the rules work</a> · <a href="../">All 48 teams</a></span>
-    <span class="updated">Results updated: <span id="updated">—</span></span>
-  </div>
-</footer>
+${FOOTER("../../")}
 <div id="toast" role="status"></div>
 <script src="../../data.js"></script>
+<script src="../../icons.js"></script>
 <script src="../../app.js"></script>
+${HYDRATE}
 </body>
 </html>
 `;
@@ -111,7 +125,7 @@ function teamsIndex() {
       const t = WC.teams[c];
       return `<li><a href="${t.slug}/">${t.flag} ${t.name}</a></li>`;
     }).join("\n      ");
-    return `<div class="gcard"><h3>GROUP ${g}</h3><ul style="list-style:none;padding:0;margin:0;font-size:16px;line-height:2">\n      ${items}\n    </ul></div>`;
+    return `<div class="gcard"><h3><span>Group ${g}</span></h3><ul style="list-style:none;padding:0;margin:0;font-size:15px;line-height:2.1">\n      ${items}\n    </ul></div>`;
   }).join("\n  ");
   return `<!DOCTYPE html>
 <html lang="en">
@@ -125,13 +139,15 @@ function teamsIndex() {
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-<div class="topbar"><div class="wrap"><a class="logo" href="../">ARE WE THROUGH<span class="q">?</span></a></div></div>
+<div class="topbar"><div class="wrap"><a class="logo" href="../"><span class="mark" id="logomark"></span>AreWeThrough<span class="q">?</span></a></div></div>
 <header class="hero wrap"><h1>Pick your team</h1>
 <p class="sub">Every squad has its own scenario page. Bookmark yours for the last round of group games (June 24–27) — that's when the math gets desperate.</p></header>
 <main class="wrap"><div class="groups">
   ${byGroup}
 </div></main>
-<footer><div class="wrap cols"><span>ARE WE THROUGH<span style="color:var(--green)">?</span></span><span><a href="../">Calculator</a> · <a href="../how-it-works.html">Rules</a></span></div></footer>
+${FOOTER("../")}
+<script src="../icons.js"></script>
+<script>document.getElementById("logomark").innerHTML = icon("goal");</script>
 </body>
 </html>
 `;

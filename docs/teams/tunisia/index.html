@@ -19,29 +19,29 @@
 <body data-team="TUN">
 <div class="topbar">
   <div class="wrap">
-    <a class="logo" href="../../">ARE WE THROUGH<span class="q">?</span></a>
-    <select id="teampick" aria-label="Pick your team"><option value="">🌍 Pick your team…</option></select>
+    <a class="logo" href="../../"><span class="mark" id="logomark"></span>AreWeThrough<span class="q">?</span></a>
     <span class="grow"></span>
-    <button class="btn primary" id="share">🔗 Share scenario</button>
+    <select class="teamsel" aria-label="Pick your team"><option value="">Pick your team…</option></select>
+    <button class="btn primary" id="share"><span id="shareicn"></span>Share scenario</button>
   </div>
 </div>
 <header class="hero wrap">
   <h1>🇹🇳 What do Tunisia need<span class="q">?</span></h1>
-  <p class="sub">Tunisia are in <b>Group F</b> of the 2026 World Cup with Japan, Netherlands and Sweden. Type scores for the remaining games — the tables, the best-thirds ranking and the verdict update instantly.</p>
-  <span class="pill">⚽ Group F · June 14 · June 20 · June 25</span>
+  <p class="sub">Tunisia are in <b>Group F</b> with Japan, Netherlands and Sweden. Type scores for the remaining games — the tables, the best-thirds ranking and the verdict update instantly.</p>
   <div id="verdict" class="verdict" style="display:none"></div>
   <div class="controls">
-    <button class="btn" id="fill-draws">Fill rest: all draws</button>
-    <button class="btn" id="fill-random">🎲 Fill rest: random</button>
-    <button class="btn" id="clear">Clear my scores</button>
-    <span class="hint">Official results are locked. Everything else is yours to predict.</span>
+    <button class="btn" id="fill-draws"><span data-icn="equal"></span>All draws</button>
+    <button class="btn" id="fill-random"><span data-icn="dices"></span>Random</button>
+    <button class="btn" id="clear"><span data-icn="eraser"></span>Reset</button>
+    <span class="hint">Played matches are locked as official results — the rest is yours to predict.</span>
   </div>
+  <p class="meta">Group F matchdays: June 14 · June 20 · June 25 · results auto-update</p>
 </header>
 <main class="wrap">
   <div id="groups" class="groups" aria-live="polite"></div>
   <section class="thirds" id="thirds">
-    <h2>🥉 Best third-placed teams — live ranking</h2>
-    <p class="note">Top 8 advance to the Round of 32. Ranked by points → goal difference → goals scored.</p>
+    <h2><span data-icn="trophy"></span>Best third-placed teams</h2>
+    <p class="note">Top 8 advance to the Round of 32 — ranked by points, then goal difference, then goals scored.</p>
     <ol id="thirdlist"></ol>
   </section>
   <section class="content">
@@ -52,13 +52,19 @@
 </main>
 <footer>
   <div class="wrap cols">
-    <span>ARE WE THROUGH<span style="color:var(--green)">?</span> — unofficial fan tool, not affiliated with FIFA</span>
-    <span><a href="../../how-it-works.html">How the rules work</a> · <a href="../">All 48 teams</a></span>
-    <span class="updated">Results updated: <span id="updated">—</span></span>
+    <span>AreWeThrough? — unofficial fan tool, not affiliated with FIFA</span>
+    <span><a href="../../how-it-works.html">How the rules work</a> · <a href="../../teams/">All 48 teams</a> · <a href="../../privacy.html">Privacy</a></span>
+    <span>Match data: <a href="https://en.wikipedia.org/wiki/2026_FIFA_World_Cup" rel="external">Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license external">CC BY-SA 4.0</a>) · updated <span id="updated">—</span></span>
   </div>
 </footer>
 <div id="toast" role="status"></div>
 <script src="../../data.js"></script>
+<script src="../../icons.js"></script>
 <script src="../../app.js"></script>
+<script>
+  document.getElementById("logomark").innerHTML = icon("goal");
+  document.getElementById("shareicn").innerHTML = icon("share-2");
+  document.querySelectorAll("[data-icn]").forEach(el => { el.innerHTML = icon(el.dataset.icn); });
+</script>
 </body>
 </html>

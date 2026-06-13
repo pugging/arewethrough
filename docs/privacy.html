@@ -11,7 +11,7 @@
 <meta name="robots" content="noindex">
 </head>
 <body>
-<div class="topbar"><div class="wrap"><a class="logo" href="./">ARE WE THROUGH<span class="q">?</span></a></div></div>
+<div class="topbar"><div class="wrap"><a class="logo" href="./"><span class="mark" id="logomark"></span>AreWeThrough<span class="q">?</span></a></div></div>
 <main class="wrap content">
   <h1>Privacy</h1>
   <p>Short version: we know nothing about you and we like it that way.</p>
@@ -21,9 +21,14 @@
     <li><b>We set no cookies.</b></li>
     <li><b>Hosting:</b> the site is served by GitHub Pages, which may log standard technical request data (IP address, user agent) per <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>.</li>
     <li><b>Analytics:</b> if we enable privacy-friendly counting (GoatCounter) or ads (Google AdSense) later, this page will say so and link the relevant policies.</li>
+    <li><b>Affiliate links:</b> if we add them, they'll be marked and we earn a commission at no cost to you.</li>
   </ul>
+  <h2>Attribution &amp; trademarks</h2>
+  <p>Match fixtures and results are sourced from <a href="https://en.wikipedia.org/wiki/2026_FIFA_World_Cup">Wikipedia</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>. Interface icons are from <a href="https://lucide.dev">Lucide</a> (ISC license). "FIFA", "FIFA World Cup" and "World Cup" are trademarks of FIFA; this is an independent, unofficial fan tool that is <b>not affiliated with, endorsed by, or sponsored by FIFA</b> or any football federation. We use those names only descriptively to refer to the tournament. We display no official emblems, logos or mascots.</p>
   <p>Questions: open an issue on the <a href="https://github.com/pugging/arewethrough">GitHub repository</a>.</p>
 </main>
-<footer><div class="wrap cols"><span>ARE WE THROUGH<span style="color:var(--green)">?</span></span><span><a href="./">Calculator</a></span></div></footer>
+<footer><div class="wrap cols"><span>AreWeThrough<span style="color:var(--muted)">?</span> — not affiliated with FIFA</span><span><a href="./">Calculator</a></span></div></footer>
+<script src="icons.js"></script>
+<script>document.getElementById("logomark").innerHTML = icon("goal");</script>
 </body>
 </html>
