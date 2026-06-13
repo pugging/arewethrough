@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What do Germany need to qualify? — World Cup 2026 Group E scenarios</title>
+<meta name="description" content="Germany are in Group E with Ivory Coast, Curaçao and Ecuador. Enter scores for the remaining games and instantly see if Germany reach the Round of 32 — including the best-thirds ranking. Free, shareable scenario links.">
+<link rel="canonical" href="https://pugging.github.io/arewethrough/teams/germany/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Are Germany through? — WC2026 scenario calculator">
+<meta property="og:description" content="Type scores for Group E's remaining games and see if Germany advance. Share your scenario as a link.">
+<meta property="og:url" content="https://pugging.github.io/arewethrough/teams/germany/">
+<meta property="og:image" content="https://pugging.github.io/arewethrough/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What group are Germany in at the 2026 World Cup?","acceptedAnswer":{"@type":"Answer","text":"Germany are in Group E together with Ivory Coast, Curaçao and Ecuador."}},{"@type":"Question","name":"Who do Germany play in the group stage?","acceptedAnswer":{"@type":"Answer","text":"Germany vs Curaçao on June 14 (NRG Stadium). Germany vs Ivory Coast on June 20 (BMO Field). Ecuador vs Germany on June 25 (MetLife Stadium)."}},{"@type":"Question","name":"Can Germany qualify for the Round of 32 as a third-placed team?","acceptedAnswer":{"@type":"Answer","text":"Yes. Besides the top two of Group E, the 8 best third-placed teams across all 12 groups advance, ranked by points, goal difference and goals scored. Use the live calculator to test any scenario."}}]}</script>
+</head>
+<body data-team="GER">
+<div class="topbar">
+  <div class="wrap">
+    <a class="logo" href="../../">ARE WE THROUGH<span class="q">?</span></a>
+    <select id="teampick" aria-label="Pick your team"><option value="">🌍 Pick your team…</option></select>
+    <span class="grow"></span>
+    <button class="btn primary" id="share">🔗 Share scenario</button>
+  </div>
+</div>
+<header class="hero wrap">
+  <h1>🇩🇪 What do Germany need<span class="q">?</span></h1>
+  <p class="sub">Germany are in <b>Group E</b> of the 2026 World Cup with Ivory Coast, Curaçao and Ecuador. Type scores for the remaining games — the tables, the best-thirds ranking and the verdict update instantly.</p>
+  <span class="pill">⚽ Group E · June 14 · June 20 · June 25</span>
+  <div id="verdict" class="verdict" style="display:none"></div>
+  <div class="controls">
+    <button class="btn" id="fill-draws">Fill rest: all draws</button>
+    <button class="btn" id="fill-random">🎲 Fill rest: random</button>
+    <button class="btn" id="clear">Clear my scores</button>
+    <span class="hint">Official results are locked. Everything else is yours to predict.</span>
+  </div>
+</header>
+<main class="wrap">
+  <div id="groups" class="groups" aria-live="polite"></div>
+  <section class="thirds" id="thirds">
+    <h2>🥉 Best third-placed teams — live ranking</h2>
+    <p class="note">Top 8 advance to the Round of 32. Ranked by points → goal difference → goals scored.</p>
+    <ol id="thirdlist"></ol>
+  </section>
+  <section class="content">
+    <h2>Germany's group fixtures</h2>
+    <p>Germany vs Curaçao on June 14 (NRG Stadium).<br>Germany vs Ivory Coast on June 20 (BMO Field).<br>Ecuador vs Germany on June 25 (MetLife Stadium).</p>
+    <p>Third place might be enough: the 8 best third-placed teams across all 12 groups also advance. That ranking — points, then goal difference, then goals scored — is computed live above. <a href="../../how-it-works.html">Full rules explained here.</a></p>
+  </section>
+</main>
+<footer>
+  <div class="wrap cols">
+    <span>ARE WE THROUGH<span style="color:var(--green)">?</span> — unofficial fan tool, not affiliated with FIFA</span>
+    <span><a href="../../how-it-works.html">How the rules work</a> · <a href="../">All 48 teams</a></span>
+    <span class="updated">Results updated: <span id="updated">—</span></span>
+  </div>
+</footer>
+<div id="toast" role="status"></div>
+<script src="../../data.js"></script>
+<script src="../../app.js"></script>
+</body>
+</html>

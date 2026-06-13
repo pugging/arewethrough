@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AreWeThrough? — Investor Deck</title>
+<meta name="description" content="10-slide deck: the argument-settling machine for the biggest sporting event on Earth.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<style>
+  html { scroll-snap-type: y mandatory; }
+  .slide {
+    min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column;
+    justify-content: center; padding: 48px 20px; max-width: 880px; margin: 0 auto;
+    border-bottom: 1px solid var(--line);
+  }
+  .slide .n { color: var(--muted); font-size: 13px; letter-spacing: 2px; margin-bottom: 14px; }
+  .slide h2 { font-size: clamp(28px, 5vw, 44px); margin: 0 0 18px; letter-spacing: -1px; }
+  .slide p, .slide li { font-size: clamp(16px, 2.4vw, 19px); color: #cfe3d3; }
+  .slide .big { font-size: clamp(40px, 9vw, 84px); font-weight: 800; letter-spacing: -2px; margin: 8px 0; }
+  .kpi { display: flex; gap: 18px; flex-wrap: wrap; margin: 18px 0; }
+  .kpi div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+  .kpi b { display: block; font-size: 26px; color: var(--green); }
+  .kpi span { color: var(--muted); font-size: 13px; }
+  .quote { border-left: 3px solid var(--green); padding-left: 16px; color: var(--muted); font-style: italic; }
+  table.cmp { border-collapse: collapse; width: 100%; font-size: 15px; }
+  table.cmp td, table.cmp th { border: 1px solid var(--line); padding: 8px 10px; text-align: center; }
+  table.cmp td:first-child { text-align: left; }
+  .ok { color: var(--green); } .no { color: var(--red); }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="n">MILKABETS PRESENTS · JUNE 2026</div>
+  <div class="big">ARE WE THROUGH<span style="color:var(--green)">?</span></div>
+  <p>The argument-settling machine for the biggest sporting event in human history.</p>
+  <p class="quote">Built overnight. Deployed before sunrise. $0 burned.</p>
+  <p style="color:var(--muted);font-size:14px">↓ scroll</p>
+</section>
+
+<section class="slide">
+  <div class="n">01 · PROBLEM</div>
+  <h2>FIFA broke every fan's brain</h2>
+  <p>The 2026 World Cup is the first with <b>48 teams in 12 groups</b>. Two advance from each — plus the <b>8 best third-placed teams</b>, ranked <em>across all twelve groups</em> by points, goal difference and goals scored.</p>
+  <p>Translation: whether Germany survive can depend on a goal scored in <em>Uruguay vs Cape Verde</em>. No human can run these permutations in their head, and every group chat on Earth is arguing about it anyway.</p>
+</section>
+
+<section class="slide">
+  <div class="n">02 · SOLUTION</div>
+  <h2>Type scores. Get the verdict. Win the argument.</h2>
+  <ul>
+    <li>⚡ Edit any remaining fixture — all 12 tables, the best-thirds ranking and your team's verdict update instantly</li>
+    <li>⚖ Exact FIFA tiebreakers, including head-to-head and the "drawing of lots" flag</li>
+    <li>🔗 <b>The killer mechanic: every scenario is a shareable URL.</b> The argument ends when your link lands in the chat</li>
+    <li>📱 No app, no signup, free, 30KB of vanilla JS</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="n">03 · WHY NOW</div>
+  <h2>A 14-day window that can't be pre-squatted</h2>
+  <p>Generic "calculator" SEO got squatted months ago. But the <b>panic</b> — "what do WE need?" — only exists June 13–27, peaks on the simultaneous final matchdays <b>June 24–27</b>, and resets with every result.</p>
+  <div class="kpi">
+    <div><b>104</b><span>matches, most ever</span></div>
+    <div><b>June 24–27</b><span>permutation panic peak</span></div>
+    <div><b>~10 days</b><span>for Google to index us before peak</span></div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="n">04 · MARKET</div>
+  <h2>The largest audience on the planet</h2>
+  <p>World Cups average billions of cumulative viewers; 2026 is hosted across the US, Canada and Mexico in prime western-hemisphere time zones. Our serviceable niche: fans actively searching qualification scenarios in English — tens of millions of queries across the window.</p>
+  <p>And uniquely in 2026: fans of ~150 non-qualified nations need a team to argue about too.</p>
+</section>
+
+<section class="slide">
+  <div class="n">05 · COMPETITION</div>
+  <h2>Big media is static. Micro-sites are ugly.</h2>
+  <table class="cmp">
+    <tr><th></th><th>ESPN/BBC articles</th><th>Calculator micro-sites</th><th>AreWeThrough?</th></tr>
+    <tr><td>Interactive scenarios</td><td class="no">✗</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+    <tr><td>Shareable scenario links</td><td class="no">✗</td><td class="no">✗</td><td class="ok">✓</td></tr>
+    <tr><td>Page per team (48)</td><td class="no">✗</td><td class="no">✗</td><td class="ok">✓</td></tr>
+    <tr><td>Full FIFA tiebreakers</td><td class="no">✗</td><td class="no">partial</td><td class="ok">✓</td></tr>
+    <tr><td>Loads in &lt;1s, no ads (yet)</td><td class="no">✗</td><td class="no">✗</td><td class="ok">✓</td></tr>
+  </table>
+</section>
+
+<section class="slide">
+  <div class="n">06 · GROWTH ENGINE</div>
+  <h2>Every argument is a distribution event</h2>
+  <p><b>Loop:</b> fan builds scenario → shares link in chat → 2–5 disputants open it → they build counter-scenarios → repeat. The product is the medium of the argument.</p>
+  <p><b>Plus:</b> answering real "what do we need?" questions in Reddit match threads (value, not spam), and 48 long-tail team pages riding query-deserves-freshness while the SERP is still soft.</p>
+</section>
+
+<section class="slide">
+  <div class="n">07 · BUSINESS MODEL</div>
+  <h2>$0 cost. Three revenue taps opening this week.</h2>
+  <div class="kpi">
+    <div><b>$15–40</b><span>per VPN signup ("watch from abroad")</span></div>
+    <div><b>5–10%</b><span>per jersey via fan-shop affiliates</span></div>
+    <div><b>$3–15</b><span>RPM via AdSense at peak (US traffic)</span></div>
+  </div>
+  <p>Honest math: a well-executed peak week ≈ hundreds of dollars, not millions — on $0 invested. The real asset is below. ↓</p>
+</section>
+
+<section class="slide">
+  <div class="n">08 · THE REAL ASSET</div>
+  <h2>A franchise, not a one-night stand</h2>
+  <p>The engine is tournament-agnostic: group tables + tiebreakers + thirds ranking + share links. Repaint for the <b>Champions League (every autumn)</b>, <b>Euro 2028</b>, <b>Copa América</b>, <b>World Cup 2030</b>.</p>
+  <p>Each cycle compounds: backlinks, brand searches, returning fans. Seasonal SaaS-like cadence with zero marginal cost. That's the path from a spike to recurring revenue.</p>
+</section>
+
+<section class="slide">
+  <div class="n">09 · TEAM & EXECUTION PROOF</div>
+  <h2>Milkabets: two founders, one robot</h2>
+  <p>This deck, the research, the engine (15 passing unit tests), 50+ SEO pages, the data pipeline and the deployment were all shipped in <b>a single overnight session</b> — which is also our pitch: we ship at the speed the window demands.</p>
+  <p class="quote">"Elon pressed a button and made billions. We pressed Enter and made a website. Same energy, different decimal." — the founders</p>
+</section>
+
+<section class="slide">
+  <div class="n">10 · THE ASK</div>
+  <h2>We're not raising. We're compounding.</h2>
+  <p>The company costs nothing to run, so we're not asking for money — we're asking for the only currency that matters this week:</p>
+  <div class="big" style="font-size:clamp(28px,6vw,52px)">Open it. Break a group. Share the link.</div>
+  <p><a class="btn primary" href="./">→ arewethrough, the live product</a></p>
+</section>
+
+</body>
+</html>

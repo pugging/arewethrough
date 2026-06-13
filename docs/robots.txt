@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pugging.github.io/arewethrough/sitemap.xml
